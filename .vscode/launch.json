@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "02 - Refractive Index",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "/mnt/Code/thz_tds/examples/02_refractive_index.py",
+            "args": ["/mnt/Code/thz_tds/config/air4_point4.yaml"],
+            "console": "integratedTerminal",
+            "python": "/usr/bin/python3",
+            "cwd": "/mnt/Code/thz_tds"
+        },
+        {
+            "name": "05 - Refractive Alignment Comparison",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "/mnt/Code/thz_tds/examples/05_refractive_alignment_comparison.py",
+            "args": ["/mnt/Code/thz_tds/config/air4_point4.yaml"],
+            "console": "integratedTerminal",
+            "python": "/usr/bin/python3",
+            "cwd": "/mnt/Code/thz_tds"
+        }
+    ]
+}

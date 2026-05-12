@@ -1,0 +1,12 @@
+theme: jekyll-theme-cayman
+
+title: thz_tds
+description: >
+  Professional Python package for Terahertz Time-Domain Spectroscopy (THz-TDS)
+  data processing — alignment, refractive index extraction, Fabry-Pérot removal.
+
+show_downloads: true   # shows "Download ZIP / tar.gz" buttons on the header
+
+# Navigation links shown in the header
+header_pages:
+  - TUTORIAL.md

@@ -1,0 +1,80 @@
+# ============================================================
+# diagnose_dataset_timing configuration
+# ============================================================
+# Usage:
+#   python examples/diagnose_dataset_timing.py --config config/diagnose_config.yaml
+#
+# Command-line flags (--ref, --sam, --thickness, ...) override
+# any values set here.
+# ============================================================
+
+
+paths:
+  reference: "/mnt/samples/PVC_B_6/air5"
+  # Root directory — not used when 'samples' list is set below.
+  
+  base_dir: null
+
+  # Where figures and exported data are saved.
+  output: "/mnt/Data/results"
+
+  # Explicit list of sample folders to load.
+  # Because this is filled in, base_dir is ignored for sample loading.
+  samples:
+    #- "/mnt/Data/10points/PE_Black/point10"
+    #- "/mnt/samples/PA6_B_3/point3"
+    - "/mnt/samples/PVC_B_6/point5"
+
+sample:
+  # Physical sample thickness [m].
+  thickness_m: 5.99e-3
+
+  # Expected real refractive index.
+  # Used to:
+  #   - check plausibility of the peak-delay estimate
+  #   - compute timing error and equivalent air-path error
+  #   - verify that the scan window captures Fabry–Pérot echoes
+  # Set to null to skip these checks.
+  expected_n: 1.6
+
+  # Number of FP echo positions to check against the scan window.
+  n_fp_echoes: 3
+
+
+alignment:
+  # Internal jitter correction applied *within* each folder only.
+  # NEVER aligns sample traces against the reference.
+  #
+  # Methods:
+  #   none                  – skip alignment
+  #   minimum               – align to the minimum of each trace
+  #   maximum               – align to the maximum
+  #   absolute_peak         – align to the largest absolute value
+  #   correlation           – integer cross-correlation to first trace
+  #   correlation_subsample – sub-sample parabolic refinement (recommended)
+  #   gaussian              – Gaussian centre fit (clean high-SNR traces only)
+  method: "correlation_subsample"
+
+  # Half-width [ps] of the cross-correlation window centred on the main pulse.
+  # null = use the full trace.
+  corr_window_ps: null
+
+  # Set to true to run all seven alignment methods on the reference folder
+  # and produce a comparison plot (average traces + jitter bars + stats table).
+  compare_all: true
+
+
+loading:
+  # Instrument amplitude scaling factor (raw ADC → physical units).
+  correction_factor: 0.0414
+
+
+plot:
+  # Set to false for headless / batch runs.
+  show: true
+
+  # DPI for any figures saved to disk.
+  dpi: 150
+
+  # Output formats for saved figures ([] to skip saving).
+  formats: ["png", "pdf"]

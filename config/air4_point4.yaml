@@ -1,0 +1,53 @@
+# Experiment: air4 reference, point4 sample
+# ============================================================
+
+paths:
+  reference: "/mnt/Data/10points/PE_Black/air4"
+  base_dir:  "/mnt/Data/10points/PE_Black"
+  output:    "/mnt/Data/THZ_results"
+  samples:
+    - "/mnt/Data/10points/PE_Black/point4"
+
+
+loading:
+  correction_factor: 0.0414
+
+
+alignment:
+  enabled: false
+  method: "gaussian_median_integer"
+  corr_window_ps: null
+  adaptive_fit_window: true
+  fit_window_sigma_factor: 5.0
+  fallback_fit_window_ps: 15.0
+  min_sigma_ps: 0.05
+  max_sigma_ps: 10.0
+  min_fit_points: 10
+  max_center_shift_ps: 5.0
+
+
+fft:
+  pad_factor: 4
+
+
+refractive_index:
+  thickness_m: 2.95e-3
+  f_low_THz: 0.4
+  f_high_THz: 1.1
+
+
+fabry_perot:
+  thickness_min_m: 2.90e-3
+  thickness_max_m: 3.01e-3
+  thickness_step_m: 1.0e-6
+  echo_count: 3
+  f_min_THz: 0.2
+  f_max_THz: 1.8
+
+
+plot:
+  zoom_xlim_ps: [90, 110]
+  limit_to_1THz: true
+  figure_size: [16, 16]
+  dpi: 300
+  formats: ["png", "pdf"]

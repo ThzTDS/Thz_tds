@@ -1,0 +1,141 @@
+# ============================================================
+# thz_tds experiment configuration
+# ============================================================
+# Copy this file and edit it for each experiment.
+# Pass the path to your copy to thz_tds.load_config().
+#
+# Usage:
+#   import thz_tds
+#   cfg = thz_tds.load_config("my_experiment.yaml")
+# ============================================================
+
+
+# ── Reference / sample pairs (used by plot_time_domain_fft.py) ────────────
+# Add as many pairs as needed — each gets its own time-domain + FFT figure.
+pairs:
+  #- reference: "/mnt/samples/Focus_analysing/ABS_focus_ceneter/ABS_3/air5"
+    #sample:    "/mnt/samples/Focus_analysing/ABS_focus_ceneter/ABS_3/point5"
+  - reference: "/mnt/samples/Focus_analysing/ABS_focus_ceneter/ABS_6/air8"
+    sample:    "/mnt/samples/Focus_analysing/ABS_focus_ceneter/ABS_6/point8"
+
+output: "/mnt/Data/results"
+
+
+# ── Sample directories (used by 02_plot_timesignal.py) ────────────────────
+# Each entry needs a name and a dir that contains air1/point1, air2/point2 …
+# sub-folders.  Add as many entries as needed.
+# samples:
+#   - name: ABS_B_6
+#     dir:  /mnt/samples/ABS_B_6'
+  
+
+loading:
+  # Instrument-specific amplitude scaling factor.
+  # Converts raw ADC counts to physical units (e.g. nA).
+  # Instrument-specific — ask your instrument supplier or calibration sheet.
+  correction_factor: 0.0414
+
+
+alignment:
+  # Enable scan-to-scan jitter correction before averaging.
+  enabled: true
+
+  # Algorithm:
+  #   correlation             - integer-sample cross-correlation (fast)
+  #   correlation_subsample   - sub-sample cross-correlation (recommended)
+  #   gaussian_minimum_mean   - Gaussian fit to negative minimum, align to mean
+  #   gaussian_median_integer - Gaussian fit to peak, integer shift, median reference
+  method: "gaussian_median_integer"
+
+  # Width [ps] of the cross-correlation window centred on the main pulse.
+  # null = use the full trace.
+  corr_window_ps:
+
+  # List of corr_window_ps values to sweep in 07_refractive_index_fp.py.
+  # null means full trace.  Leave empty ([]) to skip the sweep.
+  corr_window_sweep: []
+
+  # ── Adaptive Gaussian fitting window ─────────────────────────────────
+  # When adaptive_fit_window is true, the fitting window is computed from
+  # the estimated pulse width:
+  #   window = x0_ini ± fit_window_sigma_factor × sigma_ini
+  # where x0_ini and sigma_ini are estimated from the raw data before fitting.
+  # If sigma estimation fails or the resulting window is too small, the code
+  # falls back to a fixed half-width of fallback_fit_window_ps / 2.
+  # Set adaptive_fit_window: false to always use the fixed window.
+  adaptive_fit_window: true
+  # Window half-width multiplier.
+  # fit window = x0_ini ± fit_window_sigma_factor × sigma_ini
+  # Example: 5.0  →  x0_ini ± 5 σ  (captures >99.9% of a Gaussian pulse)
+  #          3.0  →  x0_ini ± 3 σ  (captures ~99.7%)
+  fit_window_sigma_factor: 5.0
+
+  # Fallback fixed half-width [ps] used when the adaptive window fails.
+  # Total window = 2 × fallback_fit_window_ps centred on the estimated peak.
+  fallback_fit_window_ps: 15
+
+  # Safety bounds for the adaptive sigma estimate.
+  # If sigma_ini falls outside [min_sigma_ps, max_sigma_ps], the fallback is used.
+  min_sigma_ps: 0.05      # [ps] — rejects sub-sample noise spikes
+  max_sigma_ps: 10.0      # [ps] — rejects unrealistically wide estimates
+
+  # Minimum number of data points required inside the adaptive window.
+  # Falls back to the fixed window if fewer points would be included.
+  min_fit_points: 10
+
+  # Maximum allowed shift [ps] of the fitted Gaussian centre from x0_ini.
+  # Used as the t0 bound in curve_fit to prevent wild fits.
+  max_center_shift_ps: 5.0
+
+
+fft:
+  # Zero-padding factor for the power spectrum display.
+  # Higher values give a smoother (but not more accurate) spectrum.
+  pad_factor: 4
+
+
+refractive_index:
+  # Sample thickness in metres.
+  #thickness_m: 2.95e-3
+  thickness_m: 3.01e-3
+  # Frequency band considered reliable for phase unwrapping.
+  # Below f_low_THz: phase is extrapolated linearly from a fit in the good band.
+  # Above f_high_THz: wrapped phase is used (usually noisy tail, plotted but unreliable).
+  f_low_THz: 0.4
+  f_high_THz: 1.1
+
+
+fabry_perot:
+  # Thickness search grid for the Liu model optimisation.
+  thickness_min_m: 2e-3
+  thickness_max_m: 6e-3
+  thickness_step_m: 1e-6    # 1 µm resolution
+
+  # Number of Fabry-Perot echoes included in the model.
+  echo_count: 3
+
+  # Frequency range for optical-constant extraction after FP removal.
+  f_min_THz: 0.2
+  f_max_THz: 1.8
+
+
+plot:
+  # Zoom window for the time-domain panel [ps].
+  # Set to null to show the full time axis.
+  #zoom_xlim_ps: [90, 110]
+
+  # Restrict the ≤ 1 THz spectral panel to [0, 1] THz.
+  limit_to_1THz: true
+
+  # Figure dimensions [width, height] in inches.
+  figure_size:    [14, 6]
+
+  # DPI for raster output formats.
+  dpi: 300
+
+  # Output formats saved by viz.save_figure().
+  formats: ["png", "pdf"]
+
+  # Number of traces to plot in overlay figures.
+  # Set to null to plot all traces (e.g. all 1000).
+  n_traces_plot: 

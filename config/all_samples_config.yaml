@@ -1,0 +1,106 @@
+samples:
+  # - name: ABS_B_3
+  #   reference:     /mnt/samples/ABS_B_3/air3
+  #   sample_folder: /mnt/samples/ABS_B_3/point3
+  #   thickness_m:   2.94e-3
+
+  # - name: ABS_B_6
+  #   reference:     /mnt/samples/ABS_B_6/air3
+  #   sample_folder: /mnt/samples/ABS_B_6/point3
+  #   thickness_m:   5.97e-3
+
+  # - name: PA6_6_B
+  #   reference:     /mnt/samples/PA6_6_B/air3
+  #   sample_folder: /mnt/samples/PA6_6_B/point3
+  #   thickness_m:   6.18e-3
+
+  - name: PA6_B_3
+    reference:     /mnt/samples/PA6_B_3/air3
+    sample_folder: /mnt/samples/PA6_B_3/point3
+    thickness_m:   3.01e-3
+
+  # - name: PA6_N_3
+  #   reference:     /mnt/samples/PA6_N_3/air3
+  #   sample_folder: /mnt/samples/PA6_N_3/point3
+  #   thickness_m:   3.05e-3
+
+  # - name: PE_B_3
+  #   reference:     /mnt/samples/PE_B_3/air3
+  #   sample_folder: /mnt/samples/PE_B_3/point3
+  #   thickness_m:   2.94e-3
+
+  - name: PMMA_B_3
+    reference:     /mnt/samples/PMMA_B_3/air3
+    sample_folder: /mnt/samples/PMMA_B_3/point3
+    thickness_m:   3.44e-3
+
+  # - name: PMMA_N_3
+  #   reference:     /mnt/samples/PMMA_N_3/air3
+  #   sample_folder: /mnt/samples/PMMA_N_3/point3
+  #   thickness_m:   3.02e-3
+
+  # - name: POM_B_3
+  #   reference:     /mnt/samples/POM_B_3/air3
+  #   sample_folder: /mnt/samples/POM_B_3/point3
+  #   thickness_m:   3.02e-3
+
+  # - name: POM_N_3
+  #   reference:     /mnt/samples/POM_N_3/air3
+  #   sample_folder: /mnt/samples/POM_N_3/point3
+  #   thickness_m:   3.04e-3
+
+  # - name: PP_B_1.3
+  #   reference:     /mnt/samples/PP_B_1.3/air3
+  #   sample_folder: /mnt/samples/PP_B_1.3/point3
+  #   thickness_m:   1.21e-3
+
+  # - name: PP_N_3
+  #   reference:     /mnt/samples/PP_N_3/air3
+  #   sample_folder: /mnt/samples/PP_N_3/point3
+  #   thickness_m:   3.06e-3
+
+  # - name: PP_W_1.3
+  #   reference:     /mnt/samples/PP_W_1.3/air3
+  #   sample_folder: /mnt/samples/PP_W_1.3/point3
+  #   thickness_m:   1.01e-3
+
+  - name: PVC_B_3
+    reference:     /mnt/samples/PVC_B_3/air3
+    sample_folder: /mnt/samples/PVC_B_3/point3
+    thickness_m:   2.97e-3
+
+  # - name: PVC_B_6
+  #   reference:     /mnt/samples/PVC_B_6/air9
+  #   sample_folder: /mnt/samples/PVC_B_6/point9
+  #   thickness_m:   5.99e-3
+
+
+loading:
+  correction_factor: 0.0414
+
+alignment:
+  enabled: true
+  method: "gaussian_median_integer"
+  corr_window_ps: 15e-12
+  adaptive_fit_window: true
+  fit_window_sigma_factor: 5.0
+  fallback_fit_window_ps: 15.0
+  min_sigma_ps: 0.05
+  max_sigma_ps: 10.0
+  min_fit_points: 10
+  max_center_shift_ps: 5.0
+
+fft:
+  pad_factor: 4
+
+refractive_index:
+  f_low_THz:  0.4
+  f_high_THz: 1.1
+
+plot:
+  limit_to_1THz: true
+  figure_size: [14, 6]
+  dpi: 300
+  formats: [png, pdf]
+
+output: /mnt/samples/results

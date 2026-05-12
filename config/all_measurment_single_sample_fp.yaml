@@ -1,0 +1,62 @@
+# Single-sample FP analysis — generic config
+# ===========================================
+# Change `sample_dir` to point at any sample folder.
+# The script auto-discovers air1/point1 … airN/pointN inside it.
+#
+# n_points: how many positions to process (null = all found in directory)
+# point_prefix / air_prefix: subfolder naming convention
+# ─────────────────────────────────────────────────────────────────────────
+
+sample:
+  dir:           /mnt/samples/PA6_B_3   # <── change this for another sample
+  thickness_m:   3.01e-3                 # sample thickness in metres
+  air_prefix:    air                     # reference subfolders: air1, air2, …
+  point_prefix:  point                   # sample subfolders:    point1, point2, …
+  n_points:      null                    # null = load all found; set e.g. 5 to load only first 5
+
+
+loading:
+  correction_factor: 0.0414
+  # Limit the number of traces loaded per dataset (null = load all).
+  # Set to a small number (e.g. 10) for fast testing.
+  max_traces: 10 #null
+
+
+alignment:
+  enabled: true
+  method: "gaussian_median_integer"
+  corr_window_ps: null
+  adaptive_fit_window: true
+  fit_window_sigma_factor: 5.0
+  fallback_fit_window_ps: 15.0
+  min_sigma_ps: 0.05
+  max_sigma_ps: 10.0
+  min_fit_points: 10
+  max_center_shift_ps: 5.0
+
+
+fft:
+  pad_factor: 4
+
+
+refractive_index:
+  f_low_THz:  0.4
+  f_high_THz: 1.1
+
+
+fabry_perot:
+  thickness_min_m:  2.90e-3
+  thickness_max_m:  3.10e-3
+  thickness_step_m: 1.0e-6
+  echo_count:       3
+  f_min_THz:        0.2
+  f_max_THz:        1.8
+
+
+plot:
+  figure_size: [14, 6]
+  dpi:     300
+  formats: [png, pdf]
+
+
+output: null   # null → <sample_dir>/results;  or set an explicit path
