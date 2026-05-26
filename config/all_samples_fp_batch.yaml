@@ -11,23 +11,23 @@
 
 ## Add for focus analysing
 
-samples:
-  #  - name:        ABS_B_3_focus_center
-  #    dir:         /mnt/samples/Focus_analysing/ABS_focus_ceneter/ABS_3
-  #    thickness_m: 2.96e-3
+# samples:
+#    - name:        ABS_B_3_focus_center
+#      dir:         /mnt/samples/Focus_analysing/ABS_3
+#      thickness_m: 2.96e-3
 
-  #  - name:        ABS_6_focus_center
-  #    dir:         /mnt/samples/Focus_analysing/ABS_focus_ceneter/ABS_6
-  #    thickness_m: 5.96e-3
+#    - name:        ABS_6_focus_center
+#      dir:         /mnt/samples/Focus_analysing/ABS_6
+#      thickness_m: 5.96e-3
 
 
-  #  - name:        ABS_B_3_focus_surface
-  #    dir:         /mnt/samples/Focus_analysing/ABS_focus_surface/ABS_3
-  #    thickness_m: 2.96e-3
+#    - name:        ABS_B_3_focus_surface
+#      dir:         /mnt/samples/Focus_analysing/ABS_3
+#      thickness_m: 2.96e-3
 
-  #  - name:        ABS_6_focus_surface
-  #    dir:         /mnt/samples/Focus_analysing/ABS_focus_surface/ABS_6
-  #    thickness_m: 5.96e-3
+#    - name:        ABS_6_focus_surface
+#      dir:         /mnt/samples/Focus_analysing/ABS_6
+#      thickness_m: 5.96e-3
 
 
 # samples:
@@ -35,21 +35,21 @@ samples:
 #     dir:         /mnt/samples/ABS_B_3
 #     thickness_m: 2.94e-3
 
-- name:        ABS_B_6
-  dir:         /mnt/samples/ABS_B_6
-  thickness_m: 5.95e-3
+# # - name:        ABS_B_6
+# #   dir:         /mnt/samples/ABS_B_6
+# #   thickness_m: 5.95e-3
 
-#   # - name:        PA6_6_B
-#   #   dir:         /mnt/samples/PA6_6_B
-#   #   thickness_m: 5.19e-3
+# #   # - name:        PA6_6_B
+# #   #   dir:         /mnt/samples/PA6_6_B
+# #   #   thickness_m: 5.19e-3'
 
 #   - name:        PA6_B_3
 #     dir:         /mnt/samples/PA6_B_3
 #     thickness_m: 3.01e-3
 
-#   # - name:        PA6_N_3
-#   #   dir:         /mnt/samples/PA6_N_3
-#   #   thickness_m: 3.05e-3
+#   - name:        PA6_N_3
+#     dir:         /mnt/samples/PA6_N_3
+#     thickness_m: 3.05e-3
 
 #   - name:        PE_B_3
 #     dir:         /mnt/samples/PE_B_3
@@ -59,35 +59,35 @@ samples:
 #     dir:         /mnt/samples/PMMA_B_3
 #     thickness_m: 3.43e-3
 
-#   # - name:        PMMA_N_3
-#   #   dir:         /mnt/samples/PMMA_N_3
-#   #   thickness_m: 3.02e-3
+#   - name:        PMMA_N_3
+#     dir:         /mnt/samples/PMMA_N_3
+#     thickness_m: 3.02e-3
 
 #   - name:        POM_B_3
 #     dir:         /mnt/samples/POM_B_3
 #     thickness_m: 3.02e-3
 
-#   # - name:        POM_N_3
-#   #   dir:         /mnt/samples/POM_N_3
-#   #   thickness_m: 3.04e-3
+#   - name:        POM_N_3
+#     dir:         /mnt/samples/POM_N_3
+#     thickness_m: 3.04e-3
 
 #   - name:        PP_B_1.3
-#     dir:         /mnt/samples/PP_B_1.3
+#     dir:         /mnt/samples/PP_B
 #     thickness_m: 1.21e-3
 
-#   # - name:        PP_N_3
-#   #   dir:         /mnt/samples/PP_N_3
-#   #   thickness_m: 3.06e-3
+  - name:        PP_N_3
+    dir:         /mnt/samples/PP_N_3
+    thickness_m: 3.06e-3
 
-#   # - name:        PP_W_1.3
-#   #   dir:         /mnt/samples/PP_W_1.3
-#   #   thickness_m: 1.01e-3
+# #   # - name:        PP_W_1.3
+# #   #   dir:         /mnt/samples/PP_W_1.3
+# #   #   thickness_m: 1.01e-3
 
 #   - name:        PVC_B_3
 #     dir:         /mnt/samples/PVC_B_3
 #     thickness_m: 2.97e-3
 
-#   # - name:        PVC_B_6
+# #   # - name:        PVC_B_6
 #   #   dir:         /mnt/samples/PVC_B_6
 #   #   thickness_m: 5.99e-3
 
@@ -97,7 +97,7 @@ loading:
   correction_factor: 0.0414
   # Limit the number of traces loaded per dataset (null = load all).
   # Set to a small number (e.g. 10) for fast testing.
-  max_traces: 10 #null
+  max_traces:    #null
 
 alignment:
   enabled:        true
@@ -116,20 +116,51 @@ alignment:
 
 refractive_index:
   f_low_THz:  0.4
-  f_high_THz: 1.1
+  f_high_THz: 1
   skip_fp:    true          # set true to skip Fabry-Perot correction
 
 # Settings used only by cielecki_material_features.py.
 # Overrides refractive_index.f_low/f_high for feature extraction.
 features:
   f_low_THz:  0.4
-  f_high_THz: 1.0           # upper bound for n_mean and beta fit
+  f_high_THz: 1           # upper bound for n_mean and beta fit
 
 plot:
-  figure_size:    [14, 6]
-  dpi:            150          # lower for batch speed; raise to 300 for final
-  formats:        [png]        # add pdf for publication output
-  errorbar_step:  15           # draw error bars every N frequency points
-  n_traces_plot:  10           # max individual traces to draw; null = all
+  figure_size:     [5.0, 3.3]  # inches — 9.54 × 6.29 cm, A1 poster column
+  dpi:             300
+  formats:         [svg, pdf, png]   # svg/pdf for vector poster quality, png as raster backup
+  errorbar_step:   15          # draw error bars every N frequency points
+  n_traces_plot:   100         # max individual traces to draw; null = all
+  # ── Font sizes (pt) ─────────────────────────────────────────
+  font_axis_label:  10    # xlabel / ylabel
+  font_tick:        10    # x and y tick numbers
+  font_title:       10    # axes title
+  font_legend:      9    # legend entries
+  font_line_label:  8    # inline end-of-line sample labels (used only if use_inline_labels: true)
+  # ── Stroke weights (pt) ──────────────────────────────────────
+  lw_curve:         1.0   # main per-sample mean curve
+  lw_trace:         0.4   # individual-position ghost traces (single-sample mode)
+  lw_errorbar:      0.5   # error bar lines and caps
+  lw_spine:         0.8   # axes border / spine
+  lw_grid:          0.4   # grid lines
+  # ── Tick geometry ────────────────────────────────────────────
+  tick_length:      3.0   # major tick mark length (pt)
+  tick_width:       0.8   # major tick mark width (pt)
+  capsize:          1     # error bar cap width (pt)
+  # ── Label / legend mode ──────────────────────────────────────
+  use_inline_labels:    false
+  use_legend:           true
+  legend_loc:           "upper right"  # refractive index plots
+  legend_loc_alpha:     "upper left"   # absorption plots
+  legend_ncol:          2
+  legend_handlelength:  1.5
+  legend_columnspacing: 0.8
+  legend_labelspacing:  0.3
+
+# ── Y-axis limits for combined figures ───────────────────────────────────────
+# Set to null to let matplotlib auto-scale.
+ylim:
+  n:     [1.5, 2]    # refractive index
+  alpha: null           # absorption coefficient — null = auto
 
 output: /mnt/samples/results/fp_batch

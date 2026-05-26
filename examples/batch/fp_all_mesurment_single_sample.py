@@ -35,7 +35,7 @@ from thz_tds.refractive_fp import compute_refractive_index_fp
 from thz_tds import viz
 
 
-CONFIG_DEFAULT = Path(__file__).parent.parent / "config" / "all_measurment_single_sample_fp.yaml"
+CONFIG_DEFAULT = Path(__file__).parent.parent.parent / "config" / "all_measurment_single_sample_fp.yaml"
 
 
 # ── helpers ──────────────────────────────────────────────────────────────────

@@ -134,7 +134,7 @@ plot:
   dpi: 300
 
   # Output formats saved by viz.save_figure().
-  formats: ["png", "pdf"]
+  formats: ["svg", "pdf", "png"]
 
   # Number of traces to plot in overlay figures.
   # Set to null to plot all traces (e.g. all 1000).

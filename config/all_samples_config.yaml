@@ -101,6 +101,6 @@ plot:
   limit_to_1THz: true
   figure_size: [14, 6]
   dpi: 300
-  formats: [png, pdf]
+  formats: [svg, pdf, png]
 
 output: /mnt/samples/results

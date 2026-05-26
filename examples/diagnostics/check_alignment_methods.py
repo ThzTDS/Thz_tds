@@ -334,7 +334,7 @@ def main():
     if len(sys.argv) >= 2:
         config_path = Path(sys.argv[1])
     else:
-        config_path = Path(__file__).resolve().parent.parent / "config" / "default_config.yaml"
+        config_path = Path(__file__).resolve().parent.parent.parent / "config" / "default_config.yaml"
 
     if not config_path.exists():
         raise SystemExit(f"Config file not found: {config_path}")

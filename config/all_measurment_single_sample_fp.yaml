@@ -56,7 +56,7 @@ fabry_perot:
 plot:
   figure_size: [14, 6]
   dpi:     300
-  formats: [png, pdf]
+  formats: [svg, pdf, png]
 
 
 output: null   # null → <sample_dir>/results;  or set an explicit path

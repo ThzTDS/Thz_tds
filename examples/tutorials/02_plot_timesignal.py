@@ -27,7 +27,13 @@ import yaml
 import thz_tds
 
 
-CONFIG_DEFAULT = Path(__file__).parent.parent / "config" / "default_config.yaml"
+CONFIG_DEFAULT = Path(__file__).parent.parent.parent / "config" / "default_config.yaml"
+
+
+def _label(name: str) -> str:
+    """Keep material and variant, drop thickness: 'PA6_B_3' → 'PA6_B'."""
+    parts = name.split('_')
+    return '_'.join(parts[:2]) if len(parts) >= 2 else parts[0]
 
 
 def load_yaml(path: str | Path) -> dict:
@@ -170,7 +176,7 @@ def main() -> None:
             sam_path = Path(entry["sample"])
             name     = sam_path.parent.name
             print(f"\n{'='*60}\n  {name}\n{'='*60}")
-            _plot_pair(ref_path, sam_path, name, ds_kwargs, n_traces_plot, figsize)
+            _plot_pair(ref_path, sam_path, _label(name), ds_kwargs, n_traces_plot, figsize)
 
     # ── Format B: sample dirs with auto-discovered air/point pairs ────────────
     elif "samples" in cfg:
@@ -197,7 +203,7 @@ def main() -> None:
             for idx, air_path, point_path in pairs:
                 _plot_pair(
                     air_path, point_path,
-                    f"{name}  |  position {idx}",
+                    f"{_label(name)}  |  position {idx}",
                     ds_kwargs, n_traces_plot, figsize,
                 )
 

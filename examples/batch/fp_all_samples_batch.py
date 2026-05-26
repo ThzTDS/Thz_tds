@@ -32,10 +32,16 @@ from thz_tds.refractive import compute_refractive_index
 from thz_tds import viz
 
 
-CONFIG_DEFAULT = Path(__file__).parent.parent / "config" / "all_samples_fp_batch.yaml"
+CONFIG_DEFAULT = Path(__file__).parent.parent.parent / "config" / "all_samples_fp_batch.yaml"
 
 
 # ── helpers ──────────────────────────────────────────────────────────────────
+
+def _label(name: str) -> str:
+    """Keep material and variant, drop thickness: 'PA6_B_3' → 'PA6_B'."""
+    parts = name.split('_')
+    return '_'.join(parts[:2]) if len(parts) >= 2 else parts[0]
+
 
 def load_yaml(path: str | Path) -> dict:
     with open(path) as f:
@@ -271,11 +277,51 @@ def main(config_path: str | Path = CONFIG_DEFAULT) -> None:
     skip_fp     = ri_cfg.get("skip_fp", False)
 
     shared   = {k: cfg[k] for k in ("loading", "alignment", "refractive_index", "plot")}
+    shared["ylim"] = cfg.get("ylim", {})
     plot_cfg = shared["plot"]
-    fig_size      = tuple(plot_cfg["figure_size"])
-    dpi           = plot_cfg["dpi"]
-    formats       = plot_cfg["formats"]
-    errorbar_step = plot_cfg.get("errorbar_step", 15)
+    fig_size       = tuple(plot_cfg["figure_size"])
+    dpi            = plot_cfg["dpi"]
+    formats        = plot_cfg["formats"]
+    errorbar_step   = plot_cfg.get("errorbar_step",     15)
+    font_axis_label = plot_cfg.get("font_axis_label",   10)
+    font_tick       = plot_cfg.get("font_tick",          9)
+    font_title      = plot_cfg.get("font_title",        11)
+    font_legend     = plot_cfg.get("font_legend",        9)
+    line_width      = plot_cfg.get("lw_curve",          1.8)
+    trace_width     = plot_cfg.get("lw_trace",          0.8)
+    errorbar_width  = plot_cfg.get("lw_errorbar",       1.0)
+    label_fontsize  = plot_cfg.get("font_line_label",    8)
+    capsize              = plot_cfg.get("capsize",              3)
+    xlim                 = plot_cfg.get("xlim",                 None)
+    xticks               = plot_cfg.get("xticks",               None)
+    use_inline_labels    = plot_cfg.get("use_inline_labels",    True)
+    label_x              = plot_cfg.get("label_x",              None)
+    use_legend           = plot_cfg.get("use_legend",           False)
+    legend_loc           = plot_cfg.get("legend_loc",           "best")
+    legend_loc_alpha     = plot_cfg.get("legend_loc_alpha",     legend_loc)
+    legend_ncol          = plot_cfg.get("legend_ncol",          1)
+    legend_handlelength  = plot_cfg.get("legend_handlelength",  1.5)
+    legend_columnspacing = plot_cfg.get("legend_columnspacing", 0.8)
+    legend_labelspacing  = plot_cfg.get("legend_labelspacing",  0.3)
+
+    plt.rcParams.update({
+        "svg.fonttype":       "path",
+        "axes.labelsize":     font_axis_label,
+        "axes.titlesize":     font_title,
+        "xtick.labelsize":    font_tick,
+        "ytick.labelsize":    font_tick,
+        "legend.fontsize":    font_legend,
+        "axes.linewidth":     plot_cfg.get("lw_spine",    0.8),
+        "grid.linewidth":     plot_cfg.get("lw_grid",     0.4),
+        "xtick.major.size":   plot_cfg.get("tick_length", 3.0),
+        "ytick.major.size":   plot_cfg.get("tick_length", 3.0),
+        "xtick.major.width":  plot_cfg.get("tick_width",  0.8),
+        "ytick.major.width":  plot_cfg.get("tick_width",  0.8),
+    })
+
+    _ylim_cfg  = shared.get("ylim", {}) or {}
+    ylim_n     = _ylim_cfg.get("n")      # e.g. [1.0, 2.0] or None
+    ylim_alpha = _ylim_cfg.get("alpha")  # None = auto
 
     timestamp      = datetime.now().strftime("%Y%m%d_%H%M%S")
     output_run_dir = output_root / timestamp
@@ -346,19 +392,21 @@ def main(config_path: str | Path = CONFIG_DEFAULT) -> None:
     # ── Combined figures ──────────────────────────────────────────────────
     single = len(cross_sample) == 1
 
-    def _overlay(ax, qty_avg, qty_std, qty_pos_key, ylabel, title, errorbars=True):
+    def _overlay(ax, qty_avg, qty_std, qty_pos_key, ylabel, title, errorbars=True, ylim=None, loc=None):
         for s in cross_sample:
             f   = s["f_band"]
             avg = s[qty_avg]
             std = s[qty_std]
             col = s["color"]
+            lbl = _label(s['name'])
             if single:
                 for p in s["positions"]:
                     ax.plot(
                         p["f_THz"][p["band"]], p[qty_pos_key][p["band"]],
-                        color=col, alpha=0.3, lw=0.8,
+                        color=col, alpha=0.3, lw=trace_width,
+                        label="_nolegend_",
                     )
-            ax.plot(f, avg, color=col, lw=1.8, label=s["name"])
+            ax.plot(f, avg, color=col, lw=line_width, label=lbl)
             if errorbars:
                 ax.errorbar(
                     f[::errorbar_step],
@@ -366,16 +414,42 @@ def main(config_path: str | Path = CONFIG_DEFAULT) -> None:
                     yerr=std[::errorbar_step],
                     fmt="none",
                     ecolor=col,
-                    elinewidth=1.0,
-                    capsize=3,
-                    capthick=1.0,
+                    elinewidth=errorbar_width,
+                    capsize=capsize,
+                    capthick=errorbar_width,
                     alpha=0.9,
+                    label="_nolegend_",
+                )
+            if use_inline_labels:
+                x_lbl = label_x if label_x is not None else f[-1]
+                ax.text(
+                    x_lbl, avg[-1], lbl,
+                    color=col, fontsize=label_fontsize, va="center", ha="left",
+                    clip_on=True,
                 )
         ax.set_xlabel("Frequency (THz)")
         ax.set_ylabel(ylabel)
-        ax.set_title(title)
-        ax.legend(fontsize=8)
+        if font_title:
+            ax.set_title(title)
+        if ylim is not None:
+            ax.set_ylim(ylim)
+        if xlim is not None:
+            ax.set_xlim(xlim)
+        if xticks is not None:
+            ax.set_xticks(xticks)
         ax.grid(True, alpha=0.3)
+        if use_legend:
+            ax.legend(
+                loc=loc if loc is not None else legend_loc,
+                ncol=legend_ncol,
+                fontsize=font_legend,
+                handlelength=legend_handlelength,
+                columnspacing=legend_columnspacing,
+                labelspacing=legend_labelspacing,
+                frameon=True,
+                borderpad=0.4,
+                handletextpad=0.4,
+            )
 
     # Always-present figures (n and α without FP, with and without errorbars)
     fig_n,      ax_n      = plt.subplots(figsize=fig_size)
@@ -384,15 +458,17 @@ def main(config_path: str | Path = CONFIG_DEFAULT) -> None:
     fig_a_mean, ax_a_mean = plt.subplots(figsize=fig_size)
 
     _overlay(ax_n,      "avg_n_init", "std_n_init", "n_init",
-             "Refractive index $n$",  "Refractive index — no FP correction")
+             "Refractive index $n$",  "Refractive index — no FP correction",
+             ylim=ylim_n)
     _overlay(ax_a,      "avg_a_init", "std_a_init", "alpha_init",
-             r"$\alpha$ (cm$^{-1}$)", "Absorption — no FP correction")
+             r"$\alpha$ (cm$^{-1}$)", "Absorption — no FP correction",
+             loc=legend_loc_alpha)
     _overlay(ax_n_mean, "avg_n_init", "std_n_init", "n_init",
              "Refractive index $n$",  "Mean refractive index — no FP correction",
-             errorbars=False)
+             errorbars=False, ylim=ylim_n)
     _overlay(ax_a_mean, "avg_a_init", "std_a_init", "alpha_init",
              r"$\alpha$ (cm$^{-1}$)", r"Mean absorption — no FP correction",
-             errorbars=False)
+             errorbars=False, loc=legend_loc_alpha)
 
     figures_to_save = [
         (fig_n,      "n"),
@@ -408,15 +484,17 @@ def main(config_path: str | Path = CONFIG_DEFAULT) -> None:
         fig_a_fp_mean, ax_a_fp_mean = plt.subplots(figsize=fig_size)
 
         _overlay(ax_n_fp,      "avg_n_fp",   "std_n_fp",   "n_fp",
-                 "Refractive index $n$",  "Refractive index — with FP correction")
+                 "Refractive index $n$",  "Refractive index — with FP correction",
+                 ylim=ylim_n)
         _overlay(ax_a_fp,      "avg_a_fp",   "std_a_fp",   "alpha_fp",
-                 r"$\alpha$ (cm$^{-1}$)", "Absorption — with FP correction")
+                 r"$\alpha$ (cm$^{-1}$)", "Absorption — with FP correction",
+                 loc=legend_loc_alpha)
         _overlay(ax_n_fp_mean, "avg_n_fp",   "std_n_fp",   "n_fp",
                  "Refractive index $n$",  "Mean refractive index — with FP correction",
-                 errorbars=False)
+                 errorbars=False, ylim=ylim_n)
         _overlay(ax_a_fp_mean, "avg_a_fp",   "std_a_fp",   "alpha_fp",
                  r"$\alpha$ (cm$^{-1}$)", r"Mean absorption — with FP correction",
-                 errorbars=False)
+                 errorbars=False, loc=legend_loc_alpha)
 
         figures_to_save += [
             (fig_n_fp,      "n_withfp"),
@@ -426,13 +504,17 @@ def main(config_path: str | Path = CONFIG_DEFAULT) -> None:
         ]
 
     for fig_obj, _ in figures_to_save:
-        fig_obj.tight_layout()
+        fig_obj.tight_layout(pad=0.3)
 
     plt.show()
 
     for fig_obj, tag in figures_to_save:
         stem = f"batch_{tag}"
-        viz.save_figure(fig_obj, output_run_dir / stem, formats=formats, dpi=dpi)
+        for fmt in formats:
+            path = output_run_dir / f"{stem}.{fmt}"
+            # svg/pdf: no bbox cropping so the file keeps the exact figure size
+            bbox = None if fmt in ("svg", "pdf") else "tight"
+            fig_obj.savefig(path, dpi=dpi, bbox_inches=bbox)
         print(f"  Saved: {output_run_dir / stem}.{formats[0]}")
 
     print(f"\nAll results saved in: {output_run_dir}")

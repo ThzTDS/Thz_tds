@@ -281,8 +281,8 @@ def plot_sample_curves(
 
     for ax, ylabel, title, stem in [
         (ax_n,  "Refractive index $n$",  f"{sample_id} — n(f)",       "n_curves"),
-        (ax_a,  r"$\alpha$ (cm$^{-1}$)", f"{sample_id} — α(f)",       "alpha_curves"),
-        (ax_af, r"$\alpha$ (cm$^{-1}$)", f"{sample_id} — α(f) + fit", "alpha_fit_curves"),
+        (ax_a,  r"Absorption coefficient, $\alpha$ [cm$^{-1}$]", f"{sample_id} — α(f)",       "alpha_curves"),
+        (ax_af, r"Absorption coefficient, $\alpha$ [cm$^{-1}$]", f"{sample_id} — α(f) + fit", "alpha_fit_curves"),
     ]:
         ax.axvspan(f_low, f_high, alpha=0.07, color="grey")
         ax.set_xlabel("Frequency (THz)")

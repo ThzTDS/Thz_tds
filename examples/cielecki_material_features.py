@@ -317,19 +317,41 @@ def plot_material_map(
 
     pal = _material_palette(df_v["material"].tolist())
 
+    # ── poster-scale rcParams ─────────────────────────────────────────────
+    poster_rc = {
+        "font.size":         32,
+        "axes.titlesize":    36,
+        "axes.labelsize":    34,
+        "xtick.labelsize":   40,
+        "ytick.labelsize":   40,
+        "axes.linewidth":    2.5,
+        "xtick.major.width": 2.5,
+        "ytick.major.width": 2.5,
+        "xtick.major.size":  10,
+        "ytick.major.size":  10,
+    }
+    poster_figsize = (max(fig_size[0], 22), max(fig_size[1], 18))
+
     # ── all measurements scatter ──────────────────────────────────────────
-    fig1, ax1 = plt.subplots(figsize=fig_size)
-    for mat, grp in df_v.groupby("material"):
-        ax1.scatter(grp["n_mean"], grp["beta"],
-                    c=[pal[mat]], s=28, alpha=0.7, label=mat, zorder=3)
-    ax1.set_xlabel("$n_{\\mathrm{mean}}$")
-    ax1.set_ylabel(r"$\beta$ (cm$^{-1}$ THz$^{-2}$)")
-    ax1.set_title("2D material map — individual measurements")
-    ax1.legend(fontsize=9)
-    ax1.grid(True, alpha=0.3)
-    fig1.tight_layout()
-    viz.save_figure(fig1, plots_dir / "material_map_nmean_beta", formats=formats, dpi=dpi)
-    plt.close(fig1)
+    with plt.rc_context(poster_rc):
+        fig1, ax1 = plt.subplots(figsize=poster_figsize)
+        for mat, grp in df_v.groupby("material"):
+            ax1.scatter(grp["n_mean"], grp["beta"],
+                        c=[pal[mat]], s=220, alpha=0.75, zorder=3)
+            # inline label at centroid of this material's cloud
+            ax1.text(
+                grp["n_mean"].mean(), grp["beta"].mean(),
+                f"  {mat}", color=pal[mat],
+                fontsize=18, va="center", ha="left", clip_on=False,
+                fontweight="bold",
+            )
+        ax1.set_xlabel("$n_{\\mathrm{mean}}$")
+        ax1.set_ylabel(r"$\beta$ (cm$^{-1}$ THz$^{-2}$)")
+        ax1.set_title("2D material map — individual measurements")
+        ax1.grid(True, alpha=0.3, linewidth=1.2)
+        fig1.tight_layout()
+        viz.save_figure(fig1, plots_dir / "material_map_nmean_beta", formats=formats, dpi=dpi)
+        plt.close(fig1)
 
     # ── sample mean ± std errorbars ───────────────────────────────────────
     summary = (
@@ -344,30 +366,31 @@ def plot_material_map(
     summary["n_mean_std"] = summary["n_mean_std"].fillna(0)
     summary["beta_std"]   = summary["beta_std"].fillna(0)
 
-    fig2, ax2 = plt.subplots(figsize=fig_size)
-    for mat, grp in summary.groupby("material"):
-        col = pal[mat]
-        ax2.errorbar(
-            grp["n_mean_avg"], grp["beta_avg"],
-            xerr=grp["n_mean_std"], yerr=grp["beta_std"],
-            fmt="o", color=col, ecolor=col,
-            capsize=4, capthick=1.2, elinewidth=1.0,
-            markersize=7, label=mat, zorder=3,
-        )
-        for _, row in grp.iterrows():
-            ax2.annotate(
-                row["sample_id"],
-                (row["n_mean_avg"], row["beta_avg"]),
-                textcoords="offset points", xytext=(6, 4), fontsize=7,
+    with plt.rc_context(poster_rc):
+        fig2, ax2 = plt.subplots(figsize=poster_figsize)
+        for mat, grp in summary.groupby("material"):
+            col = pal[mat]
+            ax2.errorbar(
+                grp["n_mean_avg"], grp["beta_avg"],
+                xerr=grp["n_mean_std"], yerr=grp["beta_std"],
+                fmt="o", color=col, ecolor=col,
+                capsize=10, capthick=3.0, elinewidth=2.5,
+                markersize=18, zorder=3,
             )
-    ax2.set_xlabel("$n_{\\mathrm{mean}}$")
-    ax2.set_ylabel(r"$\beta$ (cm$^{-1}$ THz$^{-2}$)")
-    ax2.set_title("2D material map — sample mean ± std")
-    ax2.legend(fontsize=9)
-    ax2.grid(True, alpha=0.3)
-    fig2.tight_layout()
-    viz.save_figure(fig2, plots_dir / "material_map_errorbars", formats=formats, dpi=dpi)
-    plt.close(fig2)
+            for _, row in grp.iterrows():
+                ax2.annotate(
+                    mat,
+                    (row["n_mean_avg"], row["beta_avg"]),
+                    textcoords="offset points", xytext=(14, 8),
+                    fontsize=18, color=col, fontweight="bold",
+                )
+        ax2.set_xlabel("$n_{\\mathrm{mean}}$")
+        ax2.set_ylabel(r"$\beta$ (cm$^{-1}$ THz$^{-2}$)")
+        ax2.set_title("2D material map — sample mean ± std")
+        ax2.grid(True, alpha=0.3, linewidth=1.2)
+        fig2.tight_layout()
+        viz.save_figure(fig2, plots_dir / "material_map_errorbars", formats=formats, dpi=dpi)
+        plt.close(fig2)
 
 
 # ── per-position individual trace loop ───────────────────────────────────────

@@ -45,7 +45,7 @@ from typing import Any, Dict
 import matplotlib.pyplot as plt
 import yaml
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from thz_tds.dataset_diag import (
     THZDatasetDiag,

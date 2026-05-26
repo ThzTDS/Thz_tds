@@ -29,7 +29,7 @@ from thz_tds.dataset import THZDataset
 
 
 # ── Config ────────────────────────────────────────────────────────────────────
-_default = Path(__file__).resolve().parent.parent / "config" / "all_samples_fp_batch.yaml"
+_default = Path(__file__).resolve().parent.parent.parent / "config" / "all_samples_fp_batch.yaml"
 config_path = sys.argv[1] if len(sys.argv) >= 2 else str(_default)
 
 try:

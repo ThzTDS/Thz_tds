@@ -23,7 +23,7 @@ import numpy as np
 import thz_tds
 
 
-CONFIG_DEFAULT = Path(__file__).parent.parent / "config" / "all_samples_config.yaml"
+CONFIG_DEFAULT = Path(__file__).parent.parent.parent / "config" / "all_samples_config.yaml"
 
 
 def load_yaml_config(path: str | Path) -> dict:
