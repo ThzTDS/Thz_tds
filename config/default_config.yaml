@@ -15,8 +15,10 @@
 pairs:
   #- reference: "/mnt/samples/Focus_analysing/ABS_focus_ceneter/ABS_3/air5"
     #sample:    "/mnt/samples/Focus_analysing/ABS_focus_ceneter/ABS_3/point5"
-  - reference: "/mnt/samples/Focus_analysing/ABS_focus_ceneter/ABS_6/air8"
-    sample:    "/mnt/samples/Focus_analysing/ABS_focus_ceneter/ABS_6/point8"
+  # - reference: "/mnt/samples/Focus_analysing/ABS_focus_ceneter/ABS_6/air8"
+  #   sample:    "/mnt/samples/Focus_analysing/ABS_focus_ceneter/ABS_6/point8"
+  - reference: "/mnt/samples/GF/PA6_B/air8"
+    sample:    "/mnt/samples/GF/PA6_B/point8"
 
 output: "/mnt/Data/results"
 

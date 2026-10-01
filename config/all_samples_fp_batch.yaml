@@ -12,28 +12,32 @@
 ## Add for focus analysing
 
 # samples:
-#    - name:        ABS_B_3_focus_center
-#      dir:         /mnt/samples/Focus_analysing/ABS_3
-#      thickness_m: 2.96e-3
+#   #  - name:        ABS_B_3_focus_center
+#   #    dir:         /mnt/samples/Focus_analysing/ABS_focus_ceneter/ABS_3
+#   #   thickness_m: 2.96e-3
 
-#    - name:        ABS_6_focus_center
-#      dir:         /mnt/samples/Focus_analysing/ABS_6
-#      thickness_m: 5.96e-3
-
-
-#    - name:        ABS_B_3_focus_surface
-#      dir:         /mnt/samples/Focus_analysing/ABS_3
-#      thickness_m: 2.96e-3
-
-#    - name:        ABS_6_focus_surface
-#      dir:         /mnt/samples/Focus_analysing/ABS_6
-#      thickness_m: 5.96e-3
+#   #  - name:        ABS_6_focus_center
+#   #    dir:         /mnt/samples/Focus_analysing/ABS_6
+#   #    thickness_m: 5.96e-3
 
 
-# samples:
-#   - name:        ABS_B_3
-#     dir:         /mnt/samples/ABS_B_3
-#     thickness_m: 2.94e-3
+#   #  - name:        ABS_B_3_focus_surface
+#   #    dir:         /mnt/samples/Focus_analysing/ABS_focus_surface/ABS_3
+#   #    thickness_m: 2.96e-3
+  
+#   # - name:        ABS_B_3_focus_surface
+#   #   dir:         /mnt/samples/2_POM
+#   #   thickness_m: 3.02e-3
+
+#   #  - name:        ABS_6_focus_surface
+#   #    dir:         /mnt/samples/Focus_analysing/ABS_6
+#   #    thickness_m: 5.96e-3
+
+
+samples:
+  # - name:        ABS_B_3
+  #   dir:         /mnt/samples/ABS_B_3
+  #   thickness_m: 2.94e-3
 
 # # - name:        ABS_B_6
 # #   dir:         /mnt/samples/ABS_B_6
@@ -43,61 +47,100 @@
 # #   #   dir:         /mnt/samples/PA6_6_B
 # #   #   thickness_m: 5.19e-3'
 
-#   - name:        PA6_B_3
-#     dir:         /mnt/samples/PA6_B_3
-#     thickness_m: 3.01e-3
 
-#   - name:        PA6_N_3
-#     dir:         /mnt/samples/PA6_N_3
-#     thickness_m: 3.05e-3
+  # - name:        PA6_N_3
+  #   dir:         /mnt/samples/PA6_N_3
+  #   thickness_m: 3.05e-3
 
-#   - name:        PE_B_3
-#     dir:         /mnt/samples/PE_B_3
-#     thickness_m: 2.94e-3
+  # - name:        PA6_B_3
+  #   dir:         /mnt/samples/PA6_B_3
+  #   thickness_m: 3.01e-3
 
-#   - name:        PMMA_B_3
-#     dir:         /mnt/samples/PMMA_B_3
-#     thickness_m: 3.43e-3
+  # - name:        PE_B_3
+  #   dir:         /mnt/samples/PE_B_3
+  #   thickness_m: 2.94e-3
 
-#   - name:        PMMA_N_3
-#     dir:         /mnt/samples/PMMA_N_3
-#     thickness_m: 3.02e-3
+  # - name:        PMMA_B_3
+  #   dir:         /mnt/samples/PMMA_B_3
+  #   thickness_m: 3.43e-3
 
-#   - name:        POM_B_3
-#     dir:         /mnt/samples/POM_B_3
-#     thickness_m: 3.02e-3
+  # - name:        PMMA_N_3
+  #   dir:         /mnt/samples/PMMA_N_3
+  #   thickness_m: 3.02e-3
 
-#   - name:        POM_N_3
-#     dir:         /mnt/samples/POM_N_3
-#     thickness_m: 3.04e-3
+  # - name:        POM_B_3
+  #   dir:         /mnt/samples/POM_B_3
+  #   thickness_m: 3.02e-3
 
-#   - name:        PP_B_1.3
-#     dir:         /mnt/samples/PP_B
-#     thickness_m: 1.21e-3
+  # - name:        POM_N_3
+  #   dir:         /mnt/samples/POM_N_3
+  #   thickness_m: 3.04e-3
 
-  - name:        PP_N_3
-    dir:         /mnt/samples/PP_N_3
-    thickness_m: 3.06e-3
+  # - name:        PP_B_1.3
+  #   dir:         /mnt/samples/PP_B
+  #   thickness_m: 1.21e-3
+
+  # - name:        PP_N_3
+  #   dir:         /mnt/samples/PP_N_3
+  #   thickness_m: 3.06e-3
 
 # #   # - name:        PP_W_1.3
 # #   #   dir:         /mnt/samples/PP_W_1.3
 # #   #   thickness_m: 1.01e-3
 
-#   - name:        PVC_B_3
-#     dir:         /mnt/samples/PVC_B_3
-#     thickness_m: 2.97e-3
+  # - name:        PVC_B_3
+  #   dir:         /mnt/samples/PVC_B_3
+  #   thickness_m: 2.97e-3
 
 # #   # - name:        PVC_B_6
 #   #   dir:         /mnt/samples/PVC_B_6
 #   #   thickness_m: 5.99e-3
 
 
+######### Second Hard Drive
+
+  - name:        PA6_B
+    dir:         /mnt/samples/GF/PA6_B_Ensinger
+    thickness_m: 6.83e-3
+
+  - name:        PA66_B_MoS2
+    dir:         /mnt/samples/GF/PA66_MoS2
+    thickness_m: 6.64e-3  
+
+  - name:        PA66_B2
+    dir:         /mnt/samples/GF/PA66_B_NotEnsinger
+    thickness_m: 4.10e-3  
+
+  - name:        PA6_GF30
+    dir:         /mnt/samples/GF/PA6_GF30
+    thickness_m: 10.65e-3  
+
+  - name:        PA66_GF30
+    dir:         /mnt/samples/GF/PA66_GF30
+    thickness_m: 8.57e-3  
+
+  ######## tessssssssssssssssssttttttttttt ######################################### 
+
+  #  - name:        PA6_B
+  #    dir:         /mnt/samples/234_Allsamples/PA6/2_PA6
+  #    thickness_m: 3.01e-3
+
+  #  - name:        PMMA_B
+  #    dir:         /mnt/samples/234_Allsamples/PMMA/2_PMMA
+  #    thickness_m: 3.43e-3
+
+
+  #  - name:        PA66_GF30
+  #    dir:         /mnt/samples/GF/PA66_GF30
+  #    thickness_m: 10.65e-3  
+  ######   tessssssssssssssssssssssstttttttttt #################################### 
+
 # ── Shared settings (apply to all samples) ──────────────────
 loading:
   correction_factor: 0.0414
   # Limit the number of traces loaded per dataset (null = load all).
   # Set to a small number (e.g. 10) for fast testing.
-  max_traces:    #null
+  max_traces:  null
 
 alignment:
   enabled:        true
@@ -115,15 +158,20 @@ alignment:
   n_points:    null     # null = all found; set e.g. 5 to limit
 
 refractive_index:
-  f_low_THz:  0.4
-  f_high_THz: 1
+  f_low_THz:  0.2
+  f_high_THz: 0.6
   skip_fp:    true          # set true to skip Fabry-Perot correction
+
+selected_frequencies:
+  enabled: false
+  frequencies_THz: [0.3, 0.7, 0.9]
+  method: "nearest" 
 
 # Settings used only by cielecki_material_features.py.
 # Overrides refractive_index.f_low/f_high for feature extraction.
-features:
-  f_low_THz:  0.4
-  f_high_THz: 1           # upper bound for n_mean and beta fit
+# features:
+#   f_low_THz:  0.4
+#   f_high_THz: 1           # upper bound for n_mean and beta fit
 
 plot:
   figure_size:     [5.0, 3.3]  # inches — 9.54 × 6.29 cm, A1 poster column
@@ -160,7 +208,31 @@ plot:
 # ── Y-axis limits for combined figures ───────────────────────────────────────
 # Set to null to let matplotlib auto-scale.
 ylim:
-  n:     [1.5, 2]    # refractive index
+  n:     [1.2, 2]    # refractive index
   alpha: null           # absorption coefficient — null = auto
 
 output: /mnt/samples/results/fp_batch
+
+# ── Alignment control check (examples/diagnostics/test_alignment_shifts.py) ──
+# Runs on the selected <prefix>N subfolders of every sample above
+# (air = air/reference measurements, point = sample measurements).
+# Per prefix: a list of numbers, e.g. [1, 4, 7], or null = all found.
+# Remove a prefix line to skip it entirely.
+# Figures are only saved, never shown.
+alignment_check:
+  output: /mnt/Data/results
+  folders:
+    air:   [1,4,8]
+    point: [1,4,8]
+
+# ── Buffer-clear timing check (examples/diagnostics/test_buffer_clear_jumps.py) ──
+# Uses alignment_check.output (same timestamped folder scheme) and the
+# alignment: settings above. Saved trace numbers are 1-based and exclude the
+# discarded warm-up traces.
+buffer_check:
+  clear_before:      [181, 361, 541, 721, 901]  # discardBufferedData() before these saved traces
+  edge_n:            5      # traces on each side used to measure a boundary jump
+  jump_threshold_ps: null   # consecutive-trace jump counted as a "jump"; null = auto from noise
+  folders:                  # null = use alignment_check.folders
+    air:   [1]
+    point: [4]

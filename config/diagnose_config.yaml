@@ -10,7 +10,7 @@
 
 
 paths:
-  reference: "/mnt/samples/PVC_B_6/air5"
+  reference: "/mnt/samples/GF/PA66_B/air5"
   # Root directory — not used when 'samples' list is set below.
   
   base_dir: null
@@ -23,11 +23,11 @@ paths:
   samples:
     #- "/mnt/Data/10points/PE_Black/point10"
     #- "/mnt/samples/PA6_B_3/point3"
-    - "/mnt/samples/PVC_B_6/point5"
+    - "/mnt/samples/GF/PA66_B/point5"
 
 sample:
   # Physical sample thickness [m].
-  thickness_m: 5.99e-3
+  thickness_m: 10.65e-3
 
   # Expected real refractive index.
   # Used to:

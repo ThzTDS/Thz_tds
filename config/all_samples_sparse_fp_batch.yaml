@@ -1,0 +1,199 @@
+# ============================================================
+# Sparse-frequency FP analysis — all samples
+# ============================================================
+# Run with:
+#   python examples/fp_all_samples_batch.py config/all_samples_sparse_fp_batch.yaml
+#
+# Each sample entry needs: dir, thickness_m
+# Shared settings below apply to every sample.
+# ============================================================
+
+## Add for focus analysing
+
+# samples:
+#   #  - name:        ABS_B_3_focus_center
+#   #    dir:         /mnt/samples/Focus_analysing/ABS_focus_ceneter/ABS_3
+#   #   thickness_m: 2.96e-3
+
+#   #  - name:        ABS_6_focus_center
+#   #    dir:         /mnt/samples/Focus_analysing/ABS_6
+#   #    thickness_m: 5.96e-3
+
+
+#   #  - name:        ABS_B_3_focus_surface
+#   #    dir:         /mnt/samples/Focus_analysing/ABS_focus_surface/ABS_3
+#   #    thickness_m: 2.96e-3
+  
+#   # - name:        ABS_B_3_focus_surface
+#   #   dir:         /mnt/samples/2_POM
+#   #   thickness_m: 3.02e-3
+
+#   #  - name:        ABS_6_focus_surface
+#   #    dir:         /mnt/samples/Focus_analysing/ABS_6
+#   #    thickness_m: 5.96e-3
+
+
+samples:
+  - name:        ABS_B_3
+    dir:         /mnt/samples/ABS_B_3
+    thickness_m: 2.94e-3
+
+# - name:        ABS_B_6
+#   dir:         /mnt/samples/ABS_B_6
+#   thickness_m: 5.95e-3
+
+#   # - name:        PA6_6_B
+#   #   dir:         /mnt/samples/PA6_6_B
+#   #   thickness_m: 5.19e-3'
+
+
+  - name:        PA6_N_3
+    dir:         /mnt/samples/PA6_N_3
+    thickness_m: 3.05e-3
+
+  - name:        PA6_B_3
+    dir:         /mnt/samples/PA6_B_3
+    thickness_m: 3.01e-3
+
+  - name:        PE_B_3
+    dir:         /mnt/samples/PE_B_3
+    thickness_m: 2.94e-3
+
+  - name:        PMMA_B_3
+    dir:         /mnt/samples/PMMA_B_3
+    thickness_m: 3.43e-3
+
+  - name:        PMMA_N_3
+    dir:         /mnt/samples/PMMA_N_3
+    thickness_m: 3.02e-3
+
+  - name:        POM_B_3
+    dir:         /mnt/samples/POM_B_3
+    thickness_m: 3.02e-3
+
+  - name:        POM_N_3
+    dir:         /mnt/samples/POM_N_3
+    thickness_m: 3.04e-3
+
+  - name:        PP_B_1.3
+    dir:         /mnt/samples/PP_B
+    thickness_m: 1.21e-3
+
+  - name:        PP_N_3
+    dir:         /mnt/samples/PP_N_3
+    thickness_m: 3.06e-3
+
+# #   # - name:        PP_W_1.3
+# #   #   dir:         /mnt/samples/PP_W_1.3
+# #   #   thickness_m: 1.01e-3
+
+  - name:        PVC_B_3
+    dir:         /mnt/samples/PVC_B_3
+    thickness_m: 2.97e-3
+
+# #   # - name:        PVC_B_6
+#   #   dir:         /mnt/samples/PVC_B_6
+#   #   thickness_m: 5.99e-3
+
+####### testttttt
+# - name:        PA6_B
+#   dir:         /mnt/samples/234_Allsamples/PA6/2_PA6
+#   thickness_m: 3.01e-3
+
+# - name:        PMMA_B
+#   dir:         /mnt/samples/234_Allsamples/PMMA/2_PMMA
+#   thickness_m: 3.43e-3
+
+# ── Shared settings (apply to all samples) ──────────────────
+loading:
+  correction_factor: 0.0414
+  # Limit the number of traces loaded per dataset (null = load all).
+  # Set to a small number (e.g. 10) for fast testing.
+  max_traces: 1000 #null
+
+alignment:
+  enabled:        true
+  method:         "gaussian_median_integer"
+  corr_window_ps: null
+  adaptive_fit_window: true
+  fit_window_sigma_factor: 5.0
+  fallback_fit_window_ps: 15.0
+  min_sigma_ps: 0.05
+  max_sigma_ps: 10.0
+  min_fit_points: 10
+  max_center_shift_ps: 5.0
+  air_prefix:     air
+  point_prefix:   point
+  n_points:    null     # null = all found; set e.g. 5 to limit
+
+selected_frequencies:
+  enabled: true
+
+  # The direct DFT is evaluated ONLY at these four frequencies.
+  # No broadband H(f), n(f), or alpha(f) is generated.
+  frequencies_THz: [0.400, 0.420, 0.700, 0.800]
+  remove_dc: true
+  reference_floor_rel: 1.0e-8
+
+  # "fp" includes the complete coherent slab denominator.
+  # Use "no_fp" only for time-gated data without internal reflections.
+  model: "fp"
+
+  # Pair phase is calculated as angle(H2 * conj(H1)); no np.unwrap is used.
+  # The low pair supplies the first group-index estimate. The second pair's
+  # integer branch is selected closest to the preceding estimate.
+  phase_pairs_THz:
+    - [0.400, 0.420]
+    - [0.700, 0.800]
+  max_phase_cycles: 20
+
+  # Sparse material model:
+  #   n(f)     = n0 + n_slope * (f - mean(f))
+  #   alpha(f) = alpha0 + beta * f^2
+  expected_n: 1.70
+  n_bounds: [1.20, 2.50]
+  n_slope_bounds_per_THz: [-0.50, 0.50]
+  alpha0_bounds_cm: [0.0, 100.0]
+  beta_bounds_cm_per_THz2: [0.0, 300.0]
+  point_alpha_bounds_cm: [0.0, 300.0]
+
+  # The plotted lines are evaluations of the fitted equations, not broadband
+  # measurements. Sparse points remain visible as markers.
+  plot_frequency_range_THz: [0.2, 1.0]
+  plot_grid_points: 500
+
+  # Pointwise absorption fitting controls.
+  relative_residual_floor: 0.05
+  absorption_multistart_count: 9
+  max_nfev: 1000
+
+plot:
+  figure_size:     [5.0, 3.3]  # inches — 9.54 × 6.29 cm, A1 poster column
+  dpi:             300
+  formats:         [svg, pdf, png]   # svg/pdf for vector poster quality, png as raster backup
+  show:            true
+  # ── Font sizes (pt) ─────────────────────────────────────────
+  font_axis_label:  10    # xlabel / ylabel
+  font_tick:        10    # x and y tick numbers
+  font_title:       10    # axes title
+  font_legend:      9    # legend entries
+  # ── Stroke weights (pt) ──────────────────────────────────────
+  lw_curve:         1.0   # fitted approximation line
+  lw_spine:         0.8   # axes border / spine
+  lw_grid:          0.4   # grid lines
+  marker_size:      4.5   # measured sparse points
+  capsize:          1     # error bar cap width (pt)
+  # ── Label / legend mode ──────────────────────────────────────
+  use_legend:           true
+  legend_loc:           "upper right"  # refractive index plots
+  legend_loc_alpha:     "upper left"   # absorption plots
+  legend_ncol:          2
+
+# ── Y-axis limits for combined figures ───────────────────────────────────────
+# Set to null to let matplotlib auto-scale.
+ylim:
+  n:     [1.2, 2]    # refractive index
+  alpha: null           # absorption coefficient — null = auto
+  tau_ps: null
+
+output: /mnt/samples/results/sparse_fp_batch

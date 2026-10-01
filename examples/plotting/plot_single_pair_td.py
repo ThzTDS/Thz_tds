@@ -19,8 +19,8 @@ import matplotlib.pyplot as plt
 import thz_tds
 
 # ── Paths ────────────────────────────────────────────────────────────────────
-REF_PATH = Path("/mnt/samples/PA6_B_3/air4")
-SAM_PATH = Path("/mnt/samples/PA6_B_3/point4")
+REF_PATH = Path("/mnt/samples/PP_N_3/air4")
+SAM_PATH = Path("/mnt/samples/PP_N_3/point4")
 
 # ── Load ─────────────────────────────────────────────────────────────────────
 print(f"Loading reference : {REF_PATH}")
