@@ -1,0 +1,132 @@
+# ============================================================
+# Batch FP analysis — all samples
+# ============================================================
+# Run with:
+#   python examples/fp_all_samples_batch.py
+#   python examples/fp_all_samples_batch.py config/all_samples_fp_batch.yaml
+#
+# Each sample entry needs: dir, thickness_m
+# Shared settings below apply to every sample.
+# ============================================================
+
+
+######### Reflection test data
+
+samples:
+  - name:        PMMA
+    dir:         /mnt/samples/MeasData_Reflection_Test/PMMA
+    thickness_m: 3.43e-3
+
+  - name:        POM
+    dir:         /mnt/samples/MeasData_Reflection_Test/POM
+    thickness_m: 3.02e-3
+
+  - name:        PMMA_overlay
+    dir:         /mnt/samples/MeasData_Reflection_Test/PMMA_overlay
+    thickness_m: 3.43e-3
+
+  - name:        POM_overlay
+    dir:         /mnt/samples/MeasData_Reflection_Test/POM_overlay
+    thickness_m: 3.02e-3
+
+# ── Shared settings (apply to all samples) ──────────────────
+loading:
+  correction_factor: 0.0414
+  # Limit the number of traces loaded per dataset (null = load all).
+  # Set to a small number (e.g. 10) for fast testing.
+  max_traces:  null
+
+alignment:
+  enabled:        true
+  method:         "gaussian_median_integer"
+  corr_window_ps: null
+  adaptive_fit_window: true
+  fit_window_sigma_factor: 5.0
+  fallback_fit_window_ps: 15.0
+  min_sigma_ps: 0.05
+  max_sigma_ps: 10.0
+  min_fit_points: 10
+  max_center_shift_ps: 5.0
+  air_prefix:     air
+  point_prefix:   point
+  n_points:    null     # null = all found; set e.g. 5 to limit
+
+refractive_index:
+  f_low_THz:  0.2
+  f_high_THz: 0.6
+  skip_fp:    true          # set true to skip Fabry-Perot correction
+
+selected_frequencies:
+  enabled: false
+  frequencies_THz: [0.3, 0.7, 0.9]
+  method: "nearest" 
+
+# Settings used only by cielecki_material_features.py.
+# Overrides refractive_index.f_low/f_high for feature extraction.
+# features:
+#   f_low_THz:  0.4
+#   f_high_THz: 1           # upper bound for n_mean and beta fit
+
+plot:
+  figure_size:     [5.0, 3.3]  # inches — 9.54 × 6.29 cm, A1 poster column
+  dpi:             300
+  formats:         [svg, pdf, png]   # svg/pdf for vector poster quality, png as raster backup
+  errorbar_step:   15          # draw error bars every N frequency points
+  n_traces_plot:   100         # max individual traces to draw; null = all
+  # ── Font sizes (pt) ─────────────────────────────────────────
+  font_axis_label:  10    # xlabel / ylabel
+  font_tick:        10    # x and y tick numbers
+  font_title:       10    # axes title
+  font_legend:      9    # legend entries
+  font_line_label:  8    # inline end-of-line sample labels (used only if use_inline_labels: true)
+  # ── Stroke weights (pt) ──────────────────────────────────────
+  lw_curve:         1.0   # main per-sample mean curve
+  lw_trace:         0.4   # individual-position ghost traces (single-sample mode)
+  lw_errorbar:      0.5   # error bar lines and caps
+  lw_spine:         0.8   # axes border / spine
+  lw_grid:          0.4   # grid lines
+  # ── Tick geometry ────────────────────────────────────────────
+  tick_length:      3.0   # major tick mark length (pt)
+  tick_width:       0.8   # major tick mark width (pt)
+  capsize:          1     # error bar cap width (pt)
+  # ── Label / legend mode ──────────────────────────────────────
+  use_inline_labels:    false
+  use_legend:           true
+  legend_loc:           "upper right"  # refractive index plots
+  legend_loc_alpha:     "upper left"   # absorption plots
+  legend_ncol:          2
+  legend_handlelength:  1.5
+  legend_columnspacing: 0.8
+  legend_labelspacing:  0.3
+
+# ── Y-axis limits for combined figures ───────────────────────────────────────
+# Set to null to let matplotlib auto-scale.
+ylim:
+  n:     [1.2, 2]    # refractive index
+  alpha: null           # absorption coefficient — null = auto
+
+output: /mnt/samples/results/reflection
+
+# ── Alignment control check (examples/diagnostics/test_alignment_shifts.py) ──
+# Runs on the selected <prefix>N subfolders of every sample above
+# (air = air/reference measurements, point = sample measurements).
+# Per prefix: a list of numbers, e.g. [1, 4, 7], or null = all found.
+# Remove a prefix line to skip it entirely.
+# Figures are only saved, never shown.
+alignment_check:
+  output: /mnt/Data/results
+  folders:
+    air:   [1,4,8]
+    point: [1,4,8]
+
+# ── Buffer-clear timing check (examples/diagnostics/test_buffer_clear_jumps.py) ──
+# Uses alignment_check.output (same timestamped folder scheme) and the
+# alignment: settings above. Saved trace numbers are 1-based and exclude the
+# discarded warm-up traces.
+buffer_check:
+  clear_before:      [181, 361, 541, 721, 901]  # discardBufferedData() before these saved traces
+  edge_n:            5      # traces on each side used to measure a boundary jump
+  jump_threshold_ps: null   # consecutive-trace jump counted as a "jump"; null = auto from noise
+  folders:                  # null = use alignment_check.folders
+    air:   [1]
+    point: [4]
