@@ -1,0 +1,94 @@
+# ============================================================
+# Z-stage repeatability analysis — THz-TDS optical displacement
+# ============================================================
+# Run with (from /mnt/z_stage_analysis):
+#   python3 analyze_z_stage.py          --config config.yaml
+#   python3 analyze_gaussian_jitter.py  --config config.yaml
+#
+# data_dir is the PARENT folder that contains manifest.csv and the
+# C<cycle>_S<step>_Z<position> folders (one folder per stage position).
+# ============================================================
+
+## Z repeatability measurements
+
+data_dir: /mnt/samples/Z_Repeatability_20261111_095729
+
+# Older measurements (uncomment to re-analyse)
+# data_dir: D:/Toptica_Experiment/MeasData/Z_Repeatability_YYYYMMDD_HHMMSS
+
+# Relative paths are resolved against this config file's folder.
+# Results go to <output_dir>/gaussian_median_integer and <output_dir>/cross_correlation.
+output_dir: /mnt/samples/results/z_stage/output
+
+# ── Units and geometry ──────────────────────────────────────
+stage_unit:          "mm"     # mm | um | native
+stage_units_per_mm:  1.0      # used only when stage_unit is "native"
+time_unit:           "ps"     # ps | fs | s  (TSV time column; 0.033372 step → ps)
+incidence_angle_deg: 0.0      # 0 = normal incidence; displacement = c·Δt / (2·cos θ)
+z_reference:         51.9040  # reference Z position (manifest z_command at returns)
+
+# ── Loading ─────────────────────────────────────────────────
+correction_factor: 0.0414     # amplitude scaling; cancels in delay estimation
+
+preprocessing:
+  baseline_correction: true       # subtract median of first N samples (false = use raw data)
+  baseline_samples: 30            # first 30 samples = 0–1 ps, ~500 ps before the pulse
+  baseline_sensitivity: true      # also fit with the opposite choice and report the difference
+  baseline_warn_ratio: 3.0        # warn if baseline-window RMS > ratio × pulse-free reference RMS
+  # analyze_z_stage.py only:
+  subtract_linear_baseline: false # true = remove linear trend (first/last N samples)
+  polarity: 1                     # 1 or -1
+
+# ── Gaussian-median jitter correction (analyze_gaussian_jitter.py) ──
+alignment:
+  enabled: true
+  method:  "gaussian_median_integer"   # only supported method
+
+gaussian_fit:
+  adaptive_fit_window:     true
+  fit_window_sigma_factor: 5.0
+  fit_window_ps:           8.0    # fallback window when adaptive sigma estimate fails
+  min_sigma_ps:            0.05
+  max_sigma_ps:            10.0
+  max_center_shift_ps:     5.0
+  min_fit_points:          10
+  # Quality control (traces failing these are excluded from median and average)
+  reject_at_bounds:        true   # fit converged onto a parameter bound
+  outlier_mad_threshold:   6.0    # |t0 − median| > k·1.4826·MAD → timing outlier (null = off)
+  max_amplitude_deviation: 0.5    # |A − median A| > 50 % → amplitude outlier (null = off)
+
+# ── Timestamps and reference returns (analyze_gaussian_jitter.py) ──
+timing:
+  use_trace_log:           true   # read per-trace timestamps from trace_log.csv
+  interval_outlier_factor: 10.0   # interval > 10 × median (~0.3 s) = gap; finds the 10 s buffer clears
+
+reference:
+  z_tolerance:        0.0001      # stage units; |z − z_reference| ≤ tol → reference group
+  scale_check_min_um: 1000        # report drift-corrected scale for moves ≥ this
+
+# ── Analysis settings ───────────────────────────────────────
+analysis:
+  max_traces_per_position: null   # null = all (1000); e.g. 50 for fast testing
+  max_time_grid_error_ps:  0.00001
+
+  # analyze_z_stage.py (cross-correlation method)
+  max_delay_ps:     30.0          # ±3 mm excursion ≈ ±20 ps optical delay → keep > 20
+  local_window_ps:  8.0           # window around main pulse for sub-sample refinement
+  sign_from_stage:  "auto"        # auto | positive | negative
+  min_correlation:  0.7           # quality flag threshold
+  min_peak_amplitude_ratio: 0.05  # quality flag threshold (vs. first position)
+  analyze_individual_traces: true # per-trace delays (slower: 13 × 1000 traces)
+  drift_correction: "none"        # only "none" is implemented
+
+  # analyze_gaussian_jitter.py
+  delay_sign_for_positive_z: 1    # +1: larger Z = later pulse (verified: +100 µm → +756 fs)
+  require_status: "completed"     # skip manifest rows with another status (null = keep all)
+  precision_target_um: 1.0        # warnings when data cannot support this claim
+  n_workers: 4                    # groups processed in parallel (~0.6 GB RAM per worker)
+
+# ── Plot settings ───────────────────────────────────────────
+plot:
+  # Zoomed copy of the waveform plots (00_raw_waveforms_zoom.png, 01_waveform_NNN_zoom.png).
+  # [t_min, t_max] in ps; null = save only the full 0–834 ps plots.
+  # Main pulse ≈ 502 ps at z_reference; ±3 mm moves it to ≈ 482 / 522 ps.
+  zoom_window_ps: [500, 510]
